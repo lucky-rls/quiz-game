@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      width: 400px;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    #question {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .option {
+      background: #007bff;
+      color: white;
+      border: none;
+      margin: 8px 0;
+      padding: 10px;
+      width: 100%;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .option:hover {
+      background: #0056b3;
+    }
+    .correct {
+      background: green !important;
+    }
+    .wrong {
+      background: red !important;
+    }
+    #next-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: green;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: none;
+    }
+    #result {
+      font-size: 20px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Quiz Game</h1>
+  <div id="question-box">
+    <div id="question"></div>
+    <div id="options"></div>
+    <button id="next-btn">Next</button>
+  </div>
+  <div id="result" style="display:none;"></div>
+</div>
+
+<script>
+  const questions = [
+    {
+      question: "What is the capital of France?",
+      options: ["Paris", "London", "Berlin", "Madrid"],
+      answer: "Paris"
+    },
+    {
+      question: "Which language is used for web development?",
+      options: ["Python", "Java", "JavaScript", "All of the above"],
+      answer: "All of the above"
+    },
+    {
+      question: "Who developed the Python programming language?",
+      options: ["Dennis Ritchie", "Guido van Rossum", "Bjarne Stroustrup", "James Gosling"],
+      answer: "Guido van Rossum"
+    },
+    {
+      question: "Which planet is known as the Red Planet?",
+      options: ["Earth", "Venus", "Mars", "Jupiter"],
+      answer: "Mars"
+    },
+    {
+      question: "What is the largest mammal?",
+      options: ["Elephant", "Giraffe", "Blue Whale", "Hippopotamus"],
+      answer: "Blue Whale"
+    },
+    {
+      question: "What is the chemical symbol for water?",
+      options: ["O2", "CO2", "H2O", "NaCl"],
+      answer: "H2O"
+    },
+    {
+      question: "Which device is used to input data into a computer?",
+      options: ["Monitor", "Printer", "Keyboard", "Speaker"],
+      answer: "Keyboard"
+    },
+    {
+      question: "What year did World War II end?",
+      options: ["1939", "1942", "1945", "1950"],
+      answer: "1945"
+    },
+    {
+      question: "What does CPU stand for?",
+      options: ["Central Process Unit", "Central Processing Unit", "Computer Personal Unit", "Control Processing Unit"],
+      answer: "Central Processing Unit"
+    },
+    {
+      question: "Which company developed the Windows operating system?",
+      options: ["Apple", "Microsoft", "Google", "IBM"],
+      answer: "Microsoft"
+    }
+  ];
+
+  let currentQuestion = 0;
+  let score = 0;
+
+  const questionBox = document.getElementById("question");
+  const optionsBox = document.getElementById("options");
+  const nextBtn = document.getElementById("next-btn");
+  const resultBox = document.getElementById("result");
+
+  function showQuestion() {
+    nextBtn.style.display = "none";
+    const q = questions[currentQuestion];
+    questionBox.textContent = q.question;
+    optionsBox.innerHTML = "";
+
+    q.options.forEach(option => {
+      const button = document.createElement("button");
+      button.classList.add("option");
+      button.textContent = option;
+      button.addEventListener("click", () => checkAnswer(button, q.answer));
+      optionsBox.appendChild(button);
+    });
+  }
+
+  function checkAnswer(selectedBtn, correctAnswer) {
+    const allOptions = document.querySelectorAll(".option");
+    allOptions.forEach(btn => {
+      btn.disabled = true;
+      if (btn.textContent === correctAnswer) {
+        btn.classList.add("correct");
+      } else if (btn === selectedBtn) {
+        btn.classList.add("wrong");
+      }
+    });
+
+    if (selectedBtn.textContent === correctAnswer) {
+      score++;
+    }
+
+    nextBtn.style.display = "inline-block";
+  }
+
+  nextBtn.addEventListener("click", () => {
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+      showQuestion();
+    } else {
+      showResult();
+    }
+  });
+
+  function showResult() {
+    document.getElementById("question-box").style.display = "none";
+    resultBox.style.display = "block";
+    resultBox.textContent = `Your Score: ${score} / ${questions.length}`;
+  }
+
+  // Start the quiz
+  showQuestion();
+</script>
+
+</body>
+</html>
